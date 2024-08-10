@@ -6,7 +6,8 @@ use serde::Serialize;
 use std::path::PathBuf;
 use std::fs::File;
 use std::io::Read;
-use base64::encode;
+use base64::engine::general_purpose::STANDARD;
+use base64::Engine;
 use ts_rs::TS;
 
 #[derive(TS)]
@@ -30,7 +31,7 @@ async fn open_image()  -> Result<LoadedImageData, String> {
       file.read_to_end(&mut buffer).map_err(|e| e.to_string())?;
       let image_data = LoadedImageData {
         file_path: path,
-        base64_data: encode(&buffer),
+        base64_data: STANDARD.encode(&buffer),
         width: 0,
         height: 0,
       };
