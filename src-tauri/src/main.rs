@@ -7,11 +7,13 @@ use std::path::PathBuf;
 use std::fs::File;
 use std::io::Read;
 use base64::encode;
+use ts_rs::TS;
 
-
+#[derive(TS)]
+#[ts(export)]
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
-struct ImageData {
+struct LoadedImageData {
   file_path: PathBuf,
   base64_data: String,
   width: u32,
@@ -19,14 +21,14 @@ struct ImageData {
 }
 
 #[tauri::command]
-async fn open_image()  -> Result<ImageData, String> {
+async fn open_image()  -> Result<LoadedImageData, String> {
   let dialog_result = FileDialogBuilder::new().pick_file();
   match dialog_result {
     Some(path) => {
       let mut file = File::open(path.clone()).map_err(|e| e.to_string())?;
       let mut buffer = Vec::new();
       file.read_to_end(&mut buffer).map_err(|e| e.to_string())?;
-      let image_data = ImageData {
+      let image_data = LoadedImageData {
         file_path: path,
         base64_data: encode(&buffer),
         width: 0,
@@ -34,7 +36,7 @@ async fn open_image()  -> Result<ImageData, String> {
       };
       Ok(image_data)
     },
-    None => Ok(ImageData{
+    None => Ok(LoadedImageData{
       file_path: "".into(),
       base64_data: "".to_string(),
       width: 0,
