@@ -2,14 +2,13 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::api::dialog::blocking::FileDialogBuilder;
-use serde::Serialize;
+use std::io::Cursor;
 use std::path::PathBuf;
-use std::fs::File;
-use std::io::Read;
+use serde::Serialize;
 use base64::engine::general_purpose::STANDARD;
 use base64::Engine;
 use ts_rs::TS;
-use image::ImageReader;
+use image::{ImageFormat, ImageReader};
 
 #[derive(TS)]
 #[ts(export)]
@@ -27,13 +26,19 @@ async fn open_image()  -> Result<LoadedImageData, String> {
   let dialog_result = FileDialogBuilder::new().pick_file();
   match dialog_result {
     Some(path) => {
-      let mut file = File::open(path.clone()).map_err(|e| e.to_string())?;
-      let mut buffer = Vec::new();
-      file.read_to_end(&mut buffer).map_err(|e| e.to_string())?;
-      let img = ImageReader::open(&path).expect("Failed to open image").decode().expect("Failed to decode image");
+      let img_reader = ImageReader::open(&path).expect("Failed to open image").with_guessed_format().expect("Failed to guess image format");
+      let img_fmt = img_reader.format().expect("Failed to get image format");
+      let img = img_reader.decode().expect("Failed to decode image");
+      let mut base64_img = Cursor::new(Vec::new());
+      img.write_to(&mut base64_img, match img_fmt {
+        ImageFormat::Png => image::ImageFormat::Png,
+        ImageFormat::Jpeg => image::ImageFormat::Jpeg,
+        ImageFormat::Gif => image::ImageFormat::Gif,
+        _ => return Err("Unsupported image format".to_string()),
+      }).expect("Failed to write image to buffer");
       let image_data = LoadedImageData {
         file_path: path,
-        base64_data: STANDARD.encode(&buffer),
+        base64_data: STANDARD.encode(base64_img.get_ref()),
         width: img.width(),
         height: img.height(),
       };
