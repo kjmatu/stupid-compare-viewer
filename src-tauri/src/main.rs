@@ -5,15 +5,19 @@ use tauri::api::dialog::blocking::FileDialogBuilder;
 
 
 #[tauri::command]
-async fn greet()  -> Result<String, String> {
+async fn open_image()  -> Result<String, String> {
   let dialog_result = FileDialogBuilder::new().pick_file();
-  println!("{:?}", dialog_result);
-  Ok(dialog_result.unwrap().into_os_string().into_string().unwrap())
+  match dialog_result {
+    Some(path) => {
+      return Ok(path.display().to_string());
+    },
+    None => Ok("No file selected".to_string()),
+  }
 }
 
 fn main() {
   tauri::Builder::default()
-    .invoke_handler(tauri::generate_handler![greet])
+    .invoke_handler(tauri::generate_handler![open_image])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
