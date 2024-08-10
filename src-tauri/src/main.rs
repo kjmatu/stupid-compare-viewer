@@ -9,6 +9,7 @@ use std::io::Read;
 use base64::engine::general_purpose::STANDARD;
 use base64::Engine;
 use ts_rs::TS;
+use image::ImageReader;
 
 #[derive(TS)]
 #[ts(export)]
@@ -29,11 +30,12 @@ async fn open_image()  -> Result<LoadedImageData, String> {
       let mut file = File::open(path.clone()).map_err(|e| e.to_string())?;
       let mut buffer = Vec::new();
       file.read_to_end(&mut buffer).map_err(|e| e.to_string())?;
+      let img = ImageReader::open(&path).expect("Failed to open image").decode().expect("Failed to decode image");
       let image_data = LoadedImageData {
         file_path: path,
         base64_data: STANDARD.encode(&buffer),
-        width: 0,
-        height: 0,
+        width: img.width(),
+        height: img.height(),
       };
       Ok(image_data)
     },

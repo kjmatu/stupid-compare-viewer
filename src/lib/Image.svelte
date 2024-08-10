@@ -17,6 +17,6 @@
 
 <div>
     <button onclick={openImage}>OPEN</button>
-    <p>{loadedImageData.filePath}</p>
+    <p>width={loadedImageData.width}, height={loadedImageData.height} {loadedImageData.filePath}</p>
     <img src={`data:image/jpeg;base64,${loadedImageData.base64Data}`} alt="src">
 </div> 
