@@ -1,27 +1,19 @@
 <script lang="ts">
-    import { invoke, convertFileSrc } from '@tauri-apps/api/tauri';
-	import type { LoadedImageData } from './../../src-tauri/bindings/LoadedImageData';
+    import { convertFileSrc } from '@tauri-apps/api/tauri';
 
-    let loadedImageData: LoadedImageData = $state(
-        {
-            "filePath": "",
-        }
-    )
-    async function openImage() {
-        loadedImageData = await invoke('open_image')
-    }
+    let { leftImagePath, rightImagePath } = $props<{leftImagePath: string, rightImagePath:string}>(); 
+
 </script>
 
 <div>
-    <button onclick={openImage}>OPEN</button>
-    <p>{loadedImageData.filePath}</p>
-
     <div class="image-container">
         <div class="image-wrapper">
-            <img src={`${convertFileSrc(loadedImageData.filePath)}`} alt="Left">
+            <p class="file-path">{leftImagePath}</p>
+            <img src={`${convertFileSrc(leftImagePath)}`} alt="Left">
         </div>
         <div class="image-wrapper">
-            <img src={`${convertFileSrc(loadedImageData.filePath)}`} alt="Right">
+            <p class="file-path">{rightImagePath}</p>
+            <img src={`${convertFileSrc(rightImagePath)}`} alt="Right">
         </div>
     </div>
 </div> 
@@ -31,6 +23,7 @@
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap; /* 画面が狭い場合に画像を縦に並べるために使用 */
+        text-align: center;
     }
 
     .image-wrapper {
@@ -41,8 +34,13 @@
         max-width: 48%; /* 初期設定: 幅の最大値を48%に設定 */
     }
 
+    .file-path {
+        margin: 0;
+        font-size: 1em;
+        word-break: break-all; /* ファイルパスが長い場合に折り返す */
+    }
     .image-wrapper img {
-        position: absolute;
+        margin-top: 10px; /* ファイルパスと画像の間に余白を追加 */
         top: 0;
         left: 0;
         width: 100%;
