@@ -5,9 +5,6 @@
     let loadedImageData: LoadedImageData = $state(
         {
             "filePath": "",
-            "base64Data": "",
-            "height": 0,
-            "width": 0
         }
     )
     async function openImage() {
