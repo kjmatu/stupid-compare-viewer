@@ -13,8 +13,9 @@ use ts_rs::TS;
 #[ts(export)]
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
-struct LoadedImageData {
+struct OpenedDirInfo {
   file_path: PathBuf,
+  image_file_paths: Vec<PathBuf>,
 }
 
 
@@ -38,19 +39,20 @@ fn get_all_image_files_in_dir(path: PathBuf, target_extensions: Vec<&str>) -> Ve
 }
 
 #[tauri::command]
-async fn open_image()  -> Result<LoadedImageData, String> {
+async fn open_image()  -> Result<OpenedDirInfo, String> {
   let dialog_result = FileDialogBuilder::new().pick_folder();
   match dialog_result {
     Some(path) => {
       let file_paths = get_all_image_files_in_dir(path, vec!["jpg", "jpeg", "png", "heic"]);
-      println!("{:?}", file_paths);
-      let image_data = LoadedImageData {
+      let image_data = OpenedDirInfo {
         file_path: file_paths[0].clone(),
+        image_file_paths: file_paths,
       };
       Ok(image_data)
     },
-    None => Ok(LoadedImageData{
+    None => Ok(OpenedDirInfo{
       file_path: "".into(),
+      image_file_paths: vec![],
     }),
   }
 }
