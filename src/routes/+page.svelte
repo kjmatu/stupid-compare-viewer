@@ -1,17 +1,19 @@
 <script lang="ts">
     import Image from '../lib/Image.svelte';
+    import FilePathList from '$lib/FilePathList.svelte';
     import { invoke } from '@tauri-apps/api/tauri';
 
-	import type { LoadedImageData } from './../../src-tauri/bindings/LoadedImageData';
+	import type { OpenedDirInfo } from './../../src-tauri/bindings/OpenedDirInfo';
 
 
-    let loadedImageData: LoadedImageData = $state(
+    let openedDirInfo: OpenedDirInfo = $state(
         {
-            "filePath": "",
+            "imageFilePaths": [],
         }
     )
     async function openImage() {
-        loadedImageData = await invoke('open_image')
+        openedDirInfo = await invoke('open_image')
+        console.log(openedDirInfo.imageFilePaths);
     }
 
 
@@ -19,4 +21,6 @@
 
 <button onclick={openImage}>OPEN</button>
 
-<Image leftImagePath={loadedImageData.filePath} rightImagePath={loadedImageData.filePath} />
+<Image leftImagePath={openedDirInfo.imageFilePaths[0]} rightImagePath={openedDirInfo.imageFilePaths[1]} />
+
+<FilePathList filePaths={openedDirInfo.imageFilePaths} />

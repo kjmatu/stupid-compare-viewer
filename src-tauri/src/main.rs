@@ -14,7 +14,6 @@ use ts_rs::TS;
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 struct OpenedDirInfo {
-  file_path: PathBuf,
   image_file_paths: Vec<PathBuf>,
 }
 
@@ -45,13 +44,11 @@ async fn open_image()  -> Result<OpenedDirInfo, String> {
     Some(path) => {
       let file_paths = get_all_image_files_in_dir(path, vec!["jpg", "jpeg", "png", "heic"]);
       let image_data = OpenedDirInfo {
-        file_path: file_paths[0].clone(),
         image_file_paths: file_paths,
       };
       Ok(image_data)
     },
     None => Ok(OpenedDirInfo{
-      file_path: "".into(),
       image_file_paths: vec![],
     }),
   }
