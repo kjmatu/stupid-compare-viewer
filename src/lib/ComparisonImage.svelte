@@ -6,7 +6,7 @@
 
 <div>
     <div class="image-wrapper">
-        <p class="file-path">{imagePath}</p>
+        <p class="file-path">{imagePath.split('/').pop()}</p>
         <img src={`${convertFileSrc(imagePath)}`} alt={alt}>
     </div>
 </div> 
