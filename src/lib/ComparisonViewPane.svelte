@@ -18,6 +18,16 @@
     const {alt} = $props<{alt: string}>();
 </script>
 
-<button onclick={openImage}>Open</button>
-<ComparisonImage imagePath={openedDirInfo.imageFilePaths[0]} alt={alt} />
-<FilePathList filePaths={openedDirInfo.imageFilePaths} />
+<div class="comparison-view-pane">
+    <button onclick={openImage}>Open</button>
+    <ComparisonImage imagePath={openedDirInfo.imageFilePaths[0]} alt={alt} />
+    <FilePathList filePaths={openedDirInfo.imageFilePaths} />
+</div>
+
+<style>
+    .comparison-view-pane {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+</style>
