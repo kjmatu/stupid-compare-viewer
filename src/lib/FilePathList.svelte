@@ -1,6 +1,8 @@
 <script lang="ts">
-    let filePaths = $props<{filePaths: Array<string>}>();
-    console.log('FilePathListコンポーネント内のfilePaths:', filePaths);
+    type FilePathListProps = {
+        filePaths: Array<string>;
+    };
+    const {filePaths}: FilePathListProps = $props();
 </script>
 
 <style>
