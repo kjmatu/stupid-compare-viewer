@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Image from '../lib/Image.svelte';
-    import FilePathList from '$lib/FilePathList.svelte';
+    import ComparisonViewPane from '$lib/ComparisonViewPane.svelte';
+
     import { invoke } from '@tauri-apps/api/tauri';
 
 	import type { OpenedDirInfo } from './../../src-tauri/bindings/OpenedDirInfo';
@@ -19,7 +19,4 @@
 </script>
 
 <button onclick={openImage}>OPEN</button>
-
-<Image leftImagePath={openedDirInfo.imageFilePaths[0]} rightImagePath={openedDirInfo.imageFilePaths[1]} />
-
-<FilePathList filePaths={openedDirInfo.imageFilePaths} />
+<ComparisonViewPane imagePath={openedDirInfo.imageFilePaths[0]} alt="Left" filePaths={openedDirInfo.imageFilePaths} />
