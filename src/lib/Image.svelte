@@ -1,7 +1,7 @@
 <script lang="ts">
     import { convertFileSrc } from '@tauri-apps/api/tauri';
 
-    let { leftImagePath, rightImagePath } = $props<{leftImagePath: string, rightImagePath:string}>(); 
+    const { leftImagePath, rightImagePath } = $props<{leftImagePath: string, rightImagePath:string}>(); 
 
 </script>
 

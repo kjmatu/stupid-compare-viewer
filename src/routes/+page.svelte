@@ -13,7 +13,6 @@
     )
     async function openImage() {
         openedDirInfo = await invoke('open_image')
-        console.log(openedDirInfo.imageFilePaths);
     }
 
 

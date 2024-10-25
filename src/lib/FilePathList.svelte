@@ -1,8 +1,5 @@
 <script lang="ts">
-    type FilePathListProps = {
-        filePaths: Array<string>;
-    };
-    const {filePaths}: FilePathListProps = $props();
+    const {filePaths} = $props<{filePaths: Array<string>}>();
 </script>
 
 <style>
