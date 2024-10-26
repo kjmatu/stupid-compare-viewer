@@ -2,11 +2,18 @@
     import { convertFileSrc } from '@tauri-apps/api/tauri';
 
     const {imagePath, alt} = $props<{imagePath: string, alt: string}>(); 
+    let fileName: string = $state("");
+    let dirPath: string = $state("");
+
+    const pathParts = imagePath.split('/');
+    fileName = pathParts.pop() || '';
+    dirPath = pathParts.join('/');    
 </script>
 
 <div>
     <div class="image-wrapper">
-        <p class="file-path">{imagePath.split('/').pop()}</p>
+        <p class="dir-path">Compare Target Directory: {dirPath}</p>
+        <p class="file-path">Comparing File:{fileName}</p>
         <img src={`${convertFileSrc(imagePath)}`} alt={alt}>
     </div>
 </div> 
