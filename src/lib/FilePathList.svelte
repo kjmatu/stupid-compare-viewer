@@ -22,7 +22,7 @@
 {#if filePaths.length > 0}
     <ul>
         {#each filePaths as path}
-        <li>{path}</li>
+        <li style="text-align: center;">{path.split("/").pop()}</li>
         {/each}
     </ul>
 {:else}
